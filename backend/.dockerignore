@@ -1,0 +1,11 @@
+target
+.mvn
+.idea
+*.iml
+.git
+.gitignore
+.classpath
+.project
+# local maven cache (mounted as volume)
+/root/.m2
+*.log
