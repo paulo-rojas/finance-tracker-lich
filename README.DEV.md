@@ -8,6 +8,12 @@ Arrancar el entorno de desarrollo (build no requerido para este modo):
 docker compose up
 ```
 
+Accesos:
+- Nginx: `http://localhost`
+- Frontend directo: `http://localhost:4200`
+- Backend directo: `http://localhost:8080`
+- API via Nginx: `http://localhost/api/...`
+
 Detener y limpiar:
 
 ```bash
