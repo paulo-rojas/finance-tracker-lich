@@ -1,0 +1,78 @@
+package com.projects.finance_tracker.entities;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+@Entity
+@Table(
+        name = "accounts",
+        indexes = {
+                @Index(name = "idx_accounts_user_name", columnList = "user_id,name", unique = true)
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_accounts_user_name", columnNames = {"user_id", "name"})
+        }
+)
+public class AccountEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account_type_id", nullable = false)
+    private AccountTypeEntity accountType;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "currency_id", nullable = false)
+    private CurrencyEntity currency;
+
+    @Column(nullable = false, length = 80)
+    private String name;
+
+    @Column(length = 255)
+    private String description;
+
+    @Column(name = "initial_balance", nullable = false, precision = 14, scale = 2)
+    private BigDecimal initialBalance = BigDecimal.ZERO;
+
+    @Column(name = "current_balance", nullable = false, precision = 14, scale = 2)
+    private BigDecimal currentBalance = BigDecimal.ZERO;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+}
