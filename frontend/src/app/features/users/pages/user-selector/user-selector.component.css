@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.page {
+  display: grid;
+  gap: 16px;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+dl {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+dt {
+  color: #667085;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 2px 0 0;
+}

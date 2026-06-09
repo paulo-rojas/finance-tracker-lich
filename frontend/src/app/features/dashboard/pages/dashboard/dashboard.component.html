@@ -1,0 +1,322 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Resumen rapido del usuario actual.</p>
+    </div>
+
+    <a mat-flat-button color="primary" routerLink="/app/transactions">
+      <mat-icon>add</mat-icon>
+      Registrar movimiento
+    </a>
+  </header>
+
+  <mat-spinner *ngIf="loading" diameter="36"></mat-spinner>
+
+  <mat-card *ngIf="!loading && errorMessage" class="error-card">
+    <mat-card-content>{{ errorMessage }}</mat-card-content>
+  </mat-card>
+
+  <ng-container *ngIf="!loading && !errorMessage">
+    <section class="balance-section">
+      <div class="section-toolbar">
+        <div>
+          <h2>Balances</h2>
+          <p>Alterna entre totales generales y saldos por cuenta.</p>
+        </div>
+        <mat-button-toggle-group
+          [(value)]="balanceView"
+          aria-label="Vista de balances"
+        >
+          <mat-button-toggle value="currency">Por moneda</mat-button-toggle>
+          <mat-button-toggle value="account">Por cuenta</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <div class="summary-grid" *ngIf="balanceView === 'currency'">
+        <mat-card class="metric-card metric-card-accounts">
+          <mat-card-content>
+            <span class="metric-icon">
+              <mat-icon>account_balance</mat-icon>
+            </span>
+            <div>
+              <span class="metric-label">Cuentas activas</span>
+              <strong>{{ accounts.length }}</strong>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="metric-card metric-card-balance" *ngFor="let balance of balanceByCurrency()">
+          <mat-card-content>
+            <span class="metric-icon">
+              <mat-icon>payments</mat-icon>
+            </span>
+            <div>
+              <span class="metric-label">Balance {{ balance.currencyCode }}</span>
+              <strong>{{ formatMoney(balance.currencyCode, balance.total) }}</strong>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="metric-card metric-card-movements">
+          <mat-card-content>
+            <span class="metric-icon">
+              <mat-icon>receipt_long</mat-icon>
+            </span>
+            <div>
+              <span class="metric-label">Movimientos</span>
+              <strong>{{ allTransactions.length }}</strong>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="summary-grid" *ngIf="balanceView === 'account'">
+        <mat-card class="account-balance-card" *ngFor="let account of accounts">
+          <mat-card-content>
+            <span class="account-type">{{ account.accountTypeName }}</span>
+            <span class="metric-label">{{ account.name }}</span>
+            <strong>{{ formatMoney(account.currencyCode, account.currentBalance) }}</strong>
+          </mat-card-content>
+        </mat-card>
+
+        <p class="empty-state" *ngIf="accounts.length === 0">
+          Crea una cuenta para ver balances.
+        </p>
+      </div>
+    </section>
+
+    <section class="charts-grid">
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Ingresos vs gastos</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="donut-layout" *ngIf="incomeExpenseBreakdown().length > 0; else noTypeData">
+            <div class="donut-chart" [style.background]="incomeExpenseDonut()">
+              <span>{{ incomeExpenseBreakdown().length }}</span>
+            </div>
+
+            <div class="chart-legend">
+              <div class="legend-row" *ngFor="let item of incomeExpenseBreakdown()">
+                <span class="legend-color" [style.background]="item.color"></span>
+                <div>
+                  <strong>{{ item.label }}</strong>
+                  <small>{{ item.count }} mov. · {{ item.percent | number: '1.0-0' }}%</small>
+                </div>
+                <b>{{ formatMoney(primaryCurrencyCode(), item.total) }}</b>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noTypeData>
+            <p class="empty-state">No hay ingresos o gastos para graficar.</p>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Gastos por categoria</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="pie-layout" *ngIf="expenseCategoryBreakdown().length > 0; else noExpenseData">
+            <div class="pie-chart" [style.background]="expenseCategoryPie()">
+              <span>{{ formatMoney(primaryCurrencyCode(), expenseCategoryTotal()) }}</span>
+            </div>
+
+            <div class="chart-legend">
+              <div class="legend-row" *ngFor="let category of expenseCategoryBreakdown()">
+                <span
+                  class="legend-color"
+                  [style.background]="category.color"
+                ></span>
+                <div>
+                  <strong>{{ category.name }}</strong>
+                  <small>{{ (category.total / expenseCategoryTotal()) * 100 | number: '1.0-1' }}%</small>
+                </div>
+                <b>{{ formatMoney(primaryCurrencyCode(), category.total) }}</b>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noExpenseData>
+            <p class="empty-state">No hay gastos para graficar.</p>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="chart-card chart-card-wide daily-chart-card">
+        <mat-card-header>
+          <mat-card-title>Ingresos y gastos diarios</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="combo-chart-wrap" *ngIf="dailyIncomeExpenseChart().length > 0; else noDailyData">
+            <div class="chart-js-container">
+              <canvas #dailyChartCanvas></canvas>
+            </div>
+
+            <div class="combo-values-grid">
+              <div class="combo-day-summary" *ngFor="let day of dailyIncomeExpenseChart()">
+                <strong>{{ day.label }}</strong>
+                <span class="summary-income">+{{ formatMoney(primaryCurrencyCode(), day.income) }}</span>
+                <span class="summary-expense">-{{ formatMoney(primaryCurrencyCode(), day.expense) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noDailyData>
+            <p class="empty-state">No hay ingresos o gastos diarios para graficar.</p>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="chart-card chart-card-wide">
+        <mat-card-header>
+          <mat-card-title>Participacion de cada cuenta</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="currency-share-grid" *ngIf="accounts.length > 0; else noAccountData">
+            <div class="currency-share" *ngFor="let group of accountShareByCurrency()">
+              <h3>{{ formatMoney(group.currencyCode, group.total) }}</h3>
+              <div class="bar-list">
+                <div class="bar-row" *ngFor="let item of group.accounts">
+                  <div class="bar-row-label">
+                    <strong>{{ item.account.name }}</strong>
+                    <span>
+                      {{ item.percent | number: '1.0-1' }}% ·
+                      {{ formatMoney(item.account.currencyCode, item.account.currentBalance) }}
+                    </span>
+                  </div>
+                  <div class="bar-track">
+                    <span
+                      class="bar-fill"
+                      [class.negative-fill]="item.account.currentBalance < 0"
+                      [style.width.%]="item.percent"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noAccountData>
+            <p class="empty-state">No hay cuentas para graficar.</p>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </section>
+
+    <div class="content-grid">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Cuentas</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="account-row" *ngFor="let account of accounts">
+            <div>
+              <strong>{{ account.name }}</strong>
+              <span>{{ account.accountTypeName }}</span>
+            </div>
+            <b [class.negative-balance]="account.currentBalance < 0">
+              {{ formatMoney(account.currencyCode, account.currentBalance) }}
+            </b>
+          </div>
+          <p class="empty-state" *ngIf="accounts.length === 0">
+            Crea una cuenta para empezar.
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Ultimas transacciones</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="transaction-filters">
+            <mat-form-field appearance="outline">
+              <mat-label>Cuenta</mat-label>
+              <mat-select
+                [(value)]="selectedAccountId"
+                (selectionChange)="onTransactionFilterChange()"
+              >
+                <mat-option [value]="null">Todas las cuentas</mat-option>
+                <mat-option *ngFor="let account of accounts" [value]="account.id">
+                  {{ account.name }} - {{ account.currencyCode }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo</mat-label>
+              <mat-select
+                [(value)]="selectedTransactionTypeCode"
+                (selectionChange)="onTransactionFilterChange()"
+              >
+                <mat-option
+                  *ngFor="let type of transactionTypeFilters"
+                  [value]="type.value"
+                >
+                  {{ type.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-spinner *ngIf="transactionsLoading" diameter="28"></mat-spinner>
+
+          <table mat-table [dataSource]="transactions" class="data-table" [class.loading-table]="transactionsLoading">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let transaction">{{ transaction.transactionDate }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>Tipo</th>
+              <td mat-cell *matCellDef="let transaction">
+                <mat-chip [ngClass]="transactionTypeChipClass(transaction.transactionTypeCode)">
+                  {{ transactionTypeLabel(transaction.transactionTypeCode) }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+              <td mat-cell *matCellDef="let transaction">
+                {{ transaction.description || transaction.categoryName || '-' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Movimiento</th>
+              <td
+                mat-cell
+                *matCellDef="let transaction"
+                class="movement-cell"
+              >
+                <div
+                  class="movement-line"
+                  *ngFor="let movement of movementRows(transaction)"
+                  [class.movement-in]="movement.direction === 'in'"
+                  [class.movement-out]="movement.direction === 'out'"
+                >
+                  <span>{{ movement.label }} {{ movement.accountName }}</span>
+                  <b>
+                    {{ movement.direction === 'in' ? '+' : '-' }}
+                    {{ formatMoney(movement.currencyCode, movement.amount) }}
+                  </b>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <p class="empty-state" *ngIf="transactions.length === 0">
+            No hay transacciones registradas.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</section>

@@ -1,1 +1,396 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --app-bg: #f4f7fb;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f8fafc;
+  --app-border: #e2e8f0;
+  --app-border-strong: #cbd5e1;
+  --app-text: #0f172a;
+  --app-muted: #64748b;
+  --app-soft-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  --app-card-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 34rem),
+    linear-gradient(180deg, #f8fafc 0%, var(--app-bg) 42%, #eef2f7 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.page {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.page-header {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.page-header h1 {
+  color: var(--app-text);
+  font-size: 30px;
+  font-weight: 750;
+  line-height: 1.12;
+}
+
+.page-header p {
+  color: var(--app-muted);
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+mat-card {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: var(--app-card-shadow) !important;
+}
+
+mat-card mat-card-header {
+  padding-bottom: 8px;
+}
+
+mat-card-title {
+  color: var(--app-text);
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-header-row {
+  background: var(--app-surface-muted);
+}
+
+.mat-mdc-header-cell {
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.mat-mdc-row {
+  transition: background-color 140ms ease;
+}
+
+.mat-mdc-row:hover {
+  background: #f8fafc;
+}
+
+.mat-mdc-cell,
+.mat-mdc-header-cell {
+  border-bottom-color: var(--app-border) !important;
+}
+
+.mat-mdc-icon-button {
+  color: #475569;
+}
+
+.mat-mdc-icon-button:hover {
+  background: #eef6ff;
+  color: var(--mat-sys-primary);
+}
+
+.empty-state {
+  align-items: center;
+  background: var(--app-surface-muted);
+  border: 1px dashed var(--app-border-strong);
+  border-radius: 8px;
+  color: var(--app-muted);
+  display: flex;
+  min-height: 72px;
+  padding: 16px;
+}
+
+.error-card {
+  border-left: 4px solid #dc2626 !important;
+}
+
+.charts-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(280px, 0.95fr) minmax(280px, 1.05fr);
+}
+
+.chart-card-wide {
+  grid-column: 1 / -1;
+}
+
+.donut-layout {
+  align-items: center;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 160px minmax(0, 1fr);
+}
+
+.pie-layout {
+  align-items: center;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 170px minmax(0, 1fr);
+}
+
+.donut-chart {
+  align-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.donut-chart::after {
+  background: var(--app-surface);
+  border-radius: 50%;
+  content: '';
+  height: 62%;
+  position: absolute;
+  width: 62%;
+}
+
+.donut-chart span {
+  color: var(--app-text);
+  font-size: 26px;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+}
+
+.pie-chart {
+  align-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.pie-chart span {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+  color: var(--app-text);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 6px 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.chart-legend,
+.bar-list {
+  display: grid;
+  gap: 12px;
+}
+
+.legend-row {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+}
+
+.legend-color {
+  border-radius: 999px;
+  height: 12px;
+  width: 12px;
+}
+
+.legend-row strong,
+.bar-row-label strong {
+  color: var(--app-text);
+  display: block;
+  font-size: 14px;
+}
+
+.legend-row small,
+.bar-row-label span {
+  color: var(--app-muted);
+  display: block;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.legend-row b {
+  color: var(--app-text);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.bar-row {
+  display: grid;
+  gap: 8px;
+}
+
+.bar-row-label {
+  align-items: end;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.bar-track {
+  background: #e2e8f0;
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  background: linear-gradient(90deg, #0ea5e9, #16a34a);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  min-width: 4px;
+}
+
+.expense-fill,
+.negative-fill {
+  background: linear-gradient(90deg, #f97316, #dc2626);
+}
+
+.movement-cell {
+  min-width: 150px;
+}
+
+.movement-line {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  line-height: 1.45;
+}
+
+.movement-line span {
+  color: var(--app-muted);
+  font-size: 12px;
+}
+
+.movement-line b {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.movement-in b,
+.movement-in span {
+  color: #047857;
+}
+
+.movement-out b,
+.movement-out span {
+  color: #b42318;
+}
+
+.combo-chart-wrap {
+  display: grid;
+  gap: 10px;
+}
+
+.daily-chart-card .mat-mdc-card-content {
+  padding-bottom: 20px;
+}
+
+.chart-js-container {
+  height: 420px;
+  min-height: 420px;
+  position: relative;
+  width: 100%;
+}
+
+.combo-values-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(7, minmax(86px, 1fr));
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.combo-day-summary {
+  background: var(--app-surface-muted);
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  display: grid;
+  gap: 3px;
+  min-width: 86px;
+  padding: 8px;
+}
+
+.combo-day-summary strong {
+  color: var(--app-text);
+  font-size: 12px;
+}
+
+.combo-day-summary span {
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.summary-income {
+  color: #047857;
+}
+
+.summary-expense {
+  color: #b42318;
+}
+
+.currency-share-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.currency-share h3 {
+  color: var(--app-text);
+  font-size: 15px;
+  margin: 0 0 12px;
+}
+
+@media (max-width: 760px) {
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .donut-layout {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .pie-layout {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}

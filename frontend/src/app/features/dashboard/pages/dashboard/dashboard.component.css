@@ -1,0 +1,239 @@
+:host {
+  display: block;
+}
+
+.page,
+.content-grid,
+.summary-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-header h1,
+.page-header p {
+  margin: 0;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.balance-section {
+  display: grid;
+  gap: 12px;
+}
+
+.section-toolbar {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.section-toolbar h2 {
+  color: var(--app-text);
+  font-size: 20px;
+  margin: 0;
+}
+
+.section-toolbar p {
+  color: var(--app-muted);
+  margin: 4px 0 0;
+}
+
+.metric-card mat-card-content {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.metric-icon {
+  align-items: center;
+  border-radius: 12px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 46px;
+  justify-content: center;
+  width: 46px;
+}
+
+.metric-card-accounts .metric-icon {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.metric-card-balance .metric-icon {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.metric-card-movements .metric-icon {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.metric-label {
+  display: block;
+  color: var(--app-muted);
+  margin-bottom: 8px;
+}
+
+mat-card-content strong {
+  font-size: 28px;
+  letter-spacing: 0;
+}
+
+.account-balance-card mat-card-content {
+  display: grid;
+  gap: 6px;
+}
+
+.account-balance-card strong {
+  color: var(--app-text);
+}
+
+.account-type {
+  background: #eff6ff;
+  border-radius: 999px;
+  color: #1d4ed8;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 9px;
+  width: fit-content;
+}
+
+.content-grid {
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.account-row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.account-row:last-child {
+  border-bottom: 0;
+}
+
+.account-row span {
+  display: block;
+  color: var(--app-muted);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.account-row b {
+  color: #166534;
+  white-space: nowrap;
+}
+
+.negative-balance {
+  color: #b42318 !important;
+}
+
+.data-table {
+  width: 100%;
+}
+
+.loading-table {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.transaction-filters {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr);
+  margin-bottom: 12px;
+}
+
+.amount-cell {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.amount-cell.income {
+  color: #047857;
+}
+
+.amount-cell.expense {
+  color: #b42318;
+}
+
+.amount-cell.internal-transfer {
+  color: #92400e;
+}
+
+.transaction-chip {
+  --mat-chip-elevated-container-color: #667085;
+  --mat-chip-elevated-disabled-container-color: #667085;
+  --mat-chip-elevated-selected-container-color: #667085;
+  --mat-chip-flat-disabled-selected-container-color: #667085;
+  --mat-chip-label-text-color: #ffffff;
+  font-weight: 600;
+}
+
+.transaction-chip-expense {
+  --mat-chip-elevated-container-color: #b42318;
+  --mat-chip-elevated-disabled-container-color: #b42318;
+  --mat-chip-elevated-selected-container-color: #b42318;
+  --mat-chip-flat-disabled-selected-container-color: #b42318;
+}
+
+.transaction-chip-internal-transfer {
+  --mat-chip-elevated-container-color: #fdb022;
+  --mat-chip-elevated-disabled-container-color: #fdb022;
+  --mat-chip-elevated-selected-container-color: #fdb022;
+  --mat-chip-flat-disabled-selected-container-color: #fdb022;
+  --mat-chip-label-text-color: #1f2937;
+}
+
+.transaction-chip-income {
+  --mat-chip-elevated-container-color: #027a48;
+  --mat-chip-elevated-disabled-container-color: #027a48;
+  --mat-chip-elevated-selected-container-color: #027a48;
+  --mat-chip-flat-disabled-selected-container-color: #027a48;
+}
+
+.empty-state {
+  color: #667085;
+  margin: 16px 0 0;
+}
+
+.error-card {
+  border-left: 4px solid #b42318;
+}
+
+@media (max-width: 960px) {
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .section-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-filters {
+    grid-template-columns: 1fr;
+  }
+
+}

@@ -1,0 +1,48 @@
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+.mt-3 {
+  margin-top: 16px;
+}
+
+.hero-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.hero-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+.avatar-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+@media (max-width: 600px) {
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .hero-card {
+    background: transparent;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,108 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02);
+  min-height: 72px;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  align-items: center;
+  color: var(--app-text);
+  display: inline-flex;
+  gap: 12px;
+  font-weight: 700;
+  min-width: fit-content;
+}
+
+.brand-mark {
+  align-items: center;
+  background: linear-gradient(135deg, #0ea5e9, #16a34a);
+  border-radius: 12px;
+  color: #ffffff;
+  display: inline-flex;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.brand strong,
+.brand small {
+  display: block;
+  line-height: 1.1;
+}
+
+.brand small {
+  color: var(--app-muted);
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+nav a {
+  border-radius: 999px;
+  color: #475569;
+  min-height: 40px;
+}
+
+nav mat-icon {
+  font-size: 19px;
+  height: 19px;
+  margin-right: 6px;
+  width: 19px;
+}
+
+.active-link {
+  background: #e0f2fe;
+  color: var(--mat-sys-primary);
+  font-weight: 700;
+}
+
+.app-content {
+  flex: 1;
+  padding: 28px;
+}
+
+@media (max-width: 860px) {
+  .app-header {
+    align-items: stretch;
+    flex-direction: column;
+    height: auto;
+    padding: 14px 16px;
+  }
+
+  nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  nav a {
+    flex: 0 0 auto;
+  }
+
+  .app-content {
+    padding: 18px;
+  }
+}

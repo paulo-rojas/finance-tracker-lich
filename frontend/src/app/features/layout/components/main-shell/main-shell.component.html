@@ -1,0 +1,40 @@
+<div class="app-shell">
+  <mat-toolbar class="app-header">
+    <a class="brand" routerLink="/app/dashboard" aria-label="Ir al dashboard">
+      <span class="brand-mark">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </span>
+      <span>
+        <strong>Finance Tracker</strong>
+        <small>Control de movimientos</small>
+      </span>
+    </a>
+
+    <nav>
+      <a mat-button routerLink="/app/dashboard" routerLinkActive="active-link">
+        <mat-icon>space_dashboard</mat-icon>
+        Dashboard
+      </a>
+      <a mat-button routerLink="/app/accounts" routerLinkActive="active-link">
+        <mat-icon>account_balance</mat-icon>
+        Cuentas
+      </a>
+      <a mat-button routerLink="/app/transactions" routerLinkActive="active-link">
+        <mat-icon>swap_horiz</mat-icon>
+        Transacciones
+      </a>
+      <a mat-button routerLink="/app/contacts" routerLinkActive="active-link">
+        <mat-icon>contacts</mat-icon>
+        Contactos
+      </a>
+      <a mat-button routerLink="/app/users" routerLinkActive="active-link">
+        <mat-icon>person</mat-icon>
+        Usuarios
+      </a>
+    </nav>
+  </mat-toolbar>
+
+  <main class="app-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

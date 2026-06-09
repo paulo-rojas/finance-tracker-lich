@@ -1,0 +1,123 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Contactos</h1>
+      <p>Registra personas, comercios, bancos o empresas relacionadas a tus movimientos.</p>
+    </div>
+  </header>
+
+  <mat-spinner *ngIf="loading" diameter="36"></mat-spinner>
+
+  <mat-card *ngIf="!loading && errorMessage" class="error-card">
+    <mat-card-content>{{ errorMessage }}</mat-card-content>
+  </mat-card>
+
+  <div class="content-grid" *ngIf="!loading && !errorMessage">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>{{ editingContact ? 'Editar contacto' : 'Nuevo contacto' }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="save()" class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="contactTypeId">
+              <mat-option *ngFor="let type of contactTypes" [value]="type.id">
+                {{ type.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Telefono</mat-label>
+            <input matInput formControlName="phone" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notas</mat-label>
+            <textarea matInput rows="3" formControlName="notes"></textarea>
+          </mat-form-field>
+
+          <mat-checkbox formControlName="isActive" *ngIf="editingContact">Activo</mat-checkbox>
+
+          <div class="actions full-width">
+            <button mat-flat-button color="primary" type="submit" [disabled]="saving">
+              <mat-icon>save</mat-icon>
+              Guardar
+            </button>
+            <button mat-button type="button" (click)="cancelEdit()" *ngIf="editingContact">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Contactos registrados</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <table mat-table [dataSource]="contacts" class="data-table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let contact">{{ contact.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let contact">{{ contact.contactTypeName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Telefono</th>
+            <td mat-cell *matCellDef="let contact">{{ contact.phone || '-' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let contact">{{ contact.email || '-' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let contact">
+              <span class="status-pill" [class.status-pill-off]="!contact.isActive">
+                {{ contact.isActive ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let contact" class="row-actions">
+              <button mat-icon-button type="button" (click)="edit(contact)" aria-label="Editar contacto">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" (click)="delete(contact)" aria-label="Eliminar contacto">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <p class="empty-state" *ngIf="contacts.length === 0">No hay contactos registrados.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

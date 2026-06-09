@@ -1,0 +1,29 @@
+<section class="page">
+  <header>
+    <h1>Usuario actual</h1>
+    <p>La aplicacion usa este usuario mientras el login esta desactivado.</p>
+  </header>
+
+  <mat-card *ngIf="user$ | async as user; else loading">
+    <mat-card-content>
+      <dl>
+        <div>
+          <dt>ID</dt>
+          <dd>{{ user.id }}</dd>
+        </div>
+        <div>
+          <dt>Nombre</dt>
+          <dd>{{ user.fullName }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>{{ user.email }}</dd>
+        </div>
+      </dl>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #loading>
+    <mat-spinner diameter="32"></mat-spinner>
+  </ng-template>
+</section>
